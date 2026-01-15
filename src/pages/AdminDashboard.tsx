@@ -6,9 +6,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Loader2, LogOut, FileSpreadsheet, BarChart3, 
-  ClipboardList, Users, Download, RefreshCw 
+  ClipboardList, Users, Download, RefreshCw, Settings 
 } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { QuestionManager } from "@/components/admin/QuestionManager";
 
 interface Submission {
   id: string;
@@ -39,7 +40,7 @@ const AdminDashboard = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [productStats, setProductStats] = useState<ProductStats[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"submissions" | "analytics">("submissions");
+  const [activeTab, setActiveTab] = useState<"submissions" | "analytics" | "questions">("submissions");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -273,6 +274,17 @@ const AdminDashboard = () => {
           >
             Analytics
           </button>
+          <button
+            onClick={() => setActiveTab("questions")}
+            className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
+              activeTab === "questions"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Settings className="w-4 h-4" />
+            Questions
+          </button>
         </div>
 
         {/* Content */}
@@ -371,6 +383,8 @@ const AdminDashboard = () => {
             ))}
           </div>
         )}
+
+        {activeTab === "questions" && <QuestionManager />}
       </div>
     </Layout>
   );
